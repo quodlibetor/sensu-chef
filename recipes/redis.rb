@@ -2,7 +2,7 @@
 # Cookbook Name:: sensu
 # Recipe:: redis
 #
-# Copyright 2012, Sonian Inc.
+# Copyright 2014, Sonian Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,5 +19,6 @@
 
 node.override.redisio.servers = [{:port => node.sensu.redis.port}]
 
+include_recipe "redisio::default"
 include_recipe "redisio::install"
 include_recipe "redisio::enable"

@@ -57,8 +57,8 @@ Use the plain-text data bag item:
 knife data bag from file sensu ssl.json
 ```
 
-Or, encrypted it with your data bag secret. See [Encrypt a Data
-Bag](http://docs.opscode.com/essentials_data_bags_encrypt.html) for
+Or, encrypt it with your data bag secret. See [Encrypt a Data
+Bag](https://docs.getchef.com/essentials_data_bags.html#encrypt-a-data-bag-item) for
 more information.
 
 ```
@@ -88,6 +88,10 @@ community RabbitMQ cookbook LWRP's.
 Installs and configures Redis for Sensu. This recipe uses the
 RedisIO cookbook and installs Redis from source.
 
+### sensu::enterprise
+
+Installs and configures Sensu Enterprise.
+
 ### sensu::server_service
 
 Enables and starts the Sensu server.
@@ -99,6 +103,10 @@ Enables and starts the Sensu client.
 ### sensu::api_service
 
 Enables and starts the Sensu API.
+
+### sensu::enterprise_service
+
+Enables and starts Sensu Enterprise.
 
 ## ATTRIBUTES
 
@@ -116,6 +124,12 @@ Enables and starts the Sensu API.
 `node.sensu.log_level` - Sensu log level (eg. "warn").
 
 `node.sensu.use_ssl` - If Sensu and RabbitMQ are to use SSL.
+
+`node.sensu.user` - The user who owns all sensu files and directories. Default
+"sensu".
+
+`node.sensu.group` - The group that owns all sensu files and directories.
+Default "sensu".
 
 `node.sensu.use_embedded_ruby` - If Sensu Ruby handlers and plugins
 use the embedded Ruby in the Sensu package.

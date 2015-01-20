@@ -4,6 +4,9 @@ driver:
   customize:
     memory: 512
 
+provisioner:
+  name: chef_zero
+
 platforms:
   - name: ubuntu-12.04
   - name: ubuntu-14.04
@@ -44,3 +47,8 @@ suites:
   - name: asset
     run_list:
       - recipe[sensu-test::asset]
+  - name: enterprise
+    run_list:
+      - recipe[sensu-test::enterprise]
+    excludes:
+      - windows-2012-r2

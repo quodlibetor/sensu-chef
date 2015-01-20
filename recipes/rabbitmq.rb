@@ -2,7 +2,7 @@
 # Cookbook Name:: sensu
 # Recipe:: rabbitmq
 #
-# Copyright 2012, Sonian Inc.
+# Copyright 2014, Sonian Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
 # limitations under the License.
 #
 
-include_recipe "rabbitmq"
-include_recipe "rabbitmq::mgmt_console"
+include_recipe "chef-sugar"
+
+group "rabbitmq"
 
 if node.sensu.use_ssl
   node.override.rabbitmq.ssl = true
@@ -46,6 +47,13 @@ if node.sensu.use_ssl
     node.override.rabbitmq["ssl_#{item}"] = path
   end
 end
+
+# The packaged erlang in 12.04 (and below) is vulnerable to 
+# the poodly exploit which stops rabbitmq starting its SSL listener
+node.override.erlang.install_method = 'esl' if ubuntu_before_trusty?
+
+include_recipe "rabbitmq"
+include_recipe "rabbitmq::mgmt_console"
 
 service "restart #{node.rabbitmq.service_name}" do
   service_name node.rabbitmq.service_name

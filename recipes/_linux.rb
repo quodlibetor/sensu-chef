@@ -2,7 +2,7 @@
 # Cookbook Name:: sensu
 # Recipe:: _linux
 #
-# Copyright 2012, Sonian Inc.
+# Copyright 2014, Sonian Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,7 +43,11 @@ when "debian"
 else
   rhel_version_equivalent = case platform_family
   when "rhel"
-    platform?("amazon") ? 6 : platform_version
+    if platform?("amazon") || platform_version >= 7
+      6
+    else
+      platform_version
+    end
   when "fedora"
     case platform_version
     when 6..11 then 5
@@ -64,10 +68,20 @@ else
   repo.gpgcheck(false) if repo.respond_to?(:gpgcheck)
 end
 
-package "sensu" do
-  version node.sensu.version
-  options package_options
-  notifies :create, "ruby_block[sensu_service_trigger]"
+case platform_family
+when "debian"
+  package "sensu" do
+    version node.sensu.version
+    options package_options
+    notifies :create, "ruby_block[sensu_service_trigger]"
+  end
+else
+  yum_package "sensu" do
+    version node.sensu.version
+    options package_options
+    allow_downgrade true
+    notifies :create, "ruby_block[sensu_service_trigger]"
+  end
 end
 
 template "/etc/default/sensu" do
